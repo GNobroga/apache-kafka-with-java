@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,8 @@ public class KafkaSubscriber {
 
     @PersonCustomListener
     private void listen(Person person) {
-       System.out.println(person);
+        System.out.println(person);
+        throw new IllegalArgumentException(); // Vai ser tratada pelo PersonErrorHandler
     }
 
     // // Ouvir algumas ou uma particição em específico.
@@ -36,8 +38,12 @@ public class KafkaSubscriber {
     // }
 
     @KafkaListener(topics = "city-topic", groupId = "city-group", containerFactory = "jsonKafkaListenerContainerFactory")
-    public void listenCities(List<City> cities) {
-       cities.forEach(this::showCity);
+    public void listenCities(
+        //List<City> cities, 
+        List<Message<City>> cities // Permiter ler o conteúdo da mensagem por inteiro
+        //@Header(KafkaHeaders.RECEIVED_PARTITION) List<Long> partitions // Lendo as partitions em batch
+    ) { 
+       cities.stream().map(Message::getPayload).forEach(this::showCity);
     }
 
     private void showCity(City city) {
