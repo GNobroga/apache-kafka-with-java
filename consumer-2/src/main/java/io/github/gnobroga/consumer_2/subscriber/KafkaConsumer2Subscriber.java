@@ -1,13 +1,13 @@
-package io.github.gnobroga.consumer.subscriber;
+package io.github.gnobroga.consumer_2.subscriber;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class KafkaSubscriber {
+public class KafkaConsumer2Subscriber {
     
     @KafkaListener(topics = "topic-1", groupId = "group-1")
-    private void listen(String payload) {
-        System.out.println("CONSUMER 1: " + payload);
+    public void listen(String payload) {
+        System.out.println("CONSUMER 2 RECEBEU: " + payload);
     }
 }
