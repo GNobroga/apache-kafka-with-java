@@ -6,6 +6,7 @@ import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -87,7 +88,10 @@ public class KafkaConsumerConfig {
 
     private DefaultErrorHandler defaultErrorHandler() {
         // DeadLetter vai tentar enviar para um topic igual ao que está sendo direcionado, mas com person-topic.DLT
-        var recoverer = new DeadLetterPublishingRecoverer(new KafkaTemplate<>(personProducerFactory()));
+        var recoverer = new DeadLetterPublishingRecoverer(new KafkaTemplate<>(personProducerFactory()), (consumerRecord, exception) -> {
+
+            return new TopicPartition(consumerRecord.topic() + ".DLT", 1); // Alterando o padrão de envio da DLT.
+        });
         // Permite definir um Error Handler com números de tentativas.
         return new DefaultErrorHandler(recoverer, new FixedBackOff(1000, 0));
     }

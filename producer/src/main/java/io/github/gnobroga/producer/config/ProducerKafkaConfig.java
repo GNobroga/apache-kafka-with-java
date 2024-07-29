@@ -27,7 +27,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import lombok.RequiredArgsConstructor;
 
-@EnableKafka
+
 @Configuration
 @RequiredArgsConstructor
 public class ProducerKafkaConfig {

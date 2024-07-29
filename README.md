@@ -10,6 +10,8 @@
 
 `groupId` - Consumers em um mesmo groupId dividem as partições existentes no tópico.
 
+`DLT (Dead Letter Topic)` - Quando ocorrer uma execeção em um listener, a mensagem pode acabar indo para um DLT.
+
 `key` - A key é um atributo que serve de critério para que o kafka decida qual partição irá receber a mensagem. Ela serve para que todas as mensagens com a mesma key sejam direcionadas para a mesma participação. Essa é a forma de garantir consumo me mensagens na ordem correta para a mesma key. Se a key for o código de um produto vc pode garantir que a reserva de estoque será para os pedidos que chegarem na ordem, por exemplo.
 
 
